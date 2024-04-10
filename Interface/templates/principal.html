@@ -1,30 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Hola {{nombre}}</h1>
-    <h3>Categorias</h3>
-    <ul>
-        {# Comentario una linea #}
-        {% comment %}
-            Esto es 
-            un comentario
-            en varias
-            lineas
-        {% endcomment %}
-        {% for item in categ %}
-            {% if item == 'code' %}
-                <li><b>{{item}}</b></li>
-            {% else %}
-                <li>item</li>
-            {% endif %}
-        {% endfor %}
-        {# lo siguiente es un filtro #}
-        <h5>Total de categorias {{categ|length}}</h5> 
-    </ul>
-</body>
-</html>
+{% extends "./layouts/base.html" %}
+
+{%block title%} Princial {%endblock%}
+
+{%block content%} 
+    <h1>Test</h1>
+{%endblock%}
