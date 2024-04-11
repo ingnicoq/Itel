@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'graficos_isdbt',
     'graficos_megafax',
     'configuracion',
+    'django_seed',
 ]
 
 

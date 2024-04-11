@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
+from django.urls import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +25,5 @@ urlpatterns = [
     path('graf_isdbt/', views.graf_isdbt, name='graf_isdbt'),  
     path('graf_megafax/', views.graf_megafax, name='graf_megafax'),
     path('config/', views.config, name='config'),
+    path('principal/',include('index.urls'))
 ]

@@ -2,4 +2,26 @@
 
 {%block content%}
 <h1> Home </h1>
+
+<h2>Todos los datos</h2>
+
+{%for item in datos %}
+    <li>{{item.nombre}} estado: {{item.estado}}</li>
+
+
+{% endfor %}
+
+{%for item in datos_filtrados %}
+<h2>{{item.nombre}}</h2>
+{% endfor %}
+
+<h3>{{unico.nombre}}</h3>
+<h2>ranking</h2>
+{%for item in limite %}
+    <li>{{item.nombre}} estado: {{item.estado}}</li>
+
+
+{% endfor %}
+
+
 {%endblock%}
