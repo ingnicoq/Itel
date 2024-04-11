@@ -21,7 +21,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.index, name='index'),
-    path('principal/<str:name>/', views.principal, name='principal'),  
-    path('secundaria/', views.secundaria, name='secundaria'),
-    path('tercera/', views.tercera, name='tercera'),
+    path('graf_isdbt/', views.graf_isdbt, name='graf_isdbt'),  
+    path('graf_megafax/', views.graf_megafax, name='graf_megafax'),
+    path('config/', views.config, name='config'),
 ]

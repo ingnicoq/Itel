@@ -4,15 +4,20 @@ from django.shortcuts import render
 def index(request):
     return render(request,'index.html',{})
 
-def principal(request, name):
+"""
+def graf_isdbt(request,name):
 
     categoria = ['code','design','admin']
 
-    return render(request,'principal.html',{'nombre':name , 'categ':categoria}) #parametros de render (requestr, dir del template, parametros que le paso)
+    return render(request,'graf_isdbt.html',{'nombre':name , 'categ':categoria}) #parametros de render (requestr, dir del template, parametros que le paso)
+"""
+def graf_isdbt(request):
 
-def secundaria(request):
-    return render(request,'secundaria.html',{})
+    return render(request,'graf_isdbt.html',{}) 
+
+def graf_megafax(request):
+    return render(request,'graf_megafax.html',{})
 
 
-def tercera(request):
-    return render(request,'tercera.html',{})
+def config(request):
+    return render(request,'config.html',{})
