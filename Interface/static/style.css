@@ -1,0 +1,12 @@
+.nav-link:hover{
+    color: rgb(44, 100, 204);
+}
+.navbar-brand{
+    margin: 15px;
+    margin-left: 50px;
+}
+.navbar-nav{
+    margin-left: 250px;
+    align-items: flex-end;
+    justify-content: end;
+}
