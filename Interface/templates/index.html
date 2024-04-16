@@ -74,12 +74,18 @@
 <script>
     $(document).ready(function() {
         function actualizarTabla() {
+            // Actualizar tabla ISDB-T
             $.get('{% url 'query' %}', function(data) {
-                $('#tabla').html(data);
+                $('#tabla-isdbt tbody').html($(data).find('#tabla-isdbt tbody').html());
+            });
+
+            // Actualizar tabla MEGAFAX
+            $.get('{% url 'query' %}', function(data) {
+                $('#tabla-megafax tbody').html($(data).find('#tabla-megafax tbody').html());
             });
         }
-
-        setInterval(actualizarTabla, 10000); // 10 segundos (10000 milisegundos)
+    
+        setInterval(actualizarTabla, 10000); 
     });
 </script>
 {%endblock%}

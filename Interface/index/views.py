@@ -12,7 +12,8 @@ def create (request):
     #datos = isdbt(nombre='ItelTV',ip='223.2.2.2',BR_min=2,canal_id='canal_1',estado=1)
     #datos.save()
     #datos = isdbt.objects.acreate(nombre='ItelTV',ip='223.2.2.2',BR_min=2,canal_id='canal_1',estado=1)
-    """ 
+    """
+    
     datos_1=isdbt(nombre='ITELTV HD',ip='0.0.0.0',BR_min=0.5,canal_id='canal_1',estado=0)
     datos_2=isdbt(nombre='AMERICA HD',ip='0.0.0.0',BR_min=0.5,canal_id='canal_2',estado=0)
     datos_3=isdbt(nombre='TV PUBLICA HD',ip='237.2.2.3',BR_min=5.1,canal_id='canal_3',estado=1)
