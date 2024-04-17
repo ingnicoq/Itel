@@ -5,6 +5,25 @@ from django.template.loader import render_to_string
 
 # Create your views here.
 
+
+
+def query(request):
+    #obtener todos los elementos
+    datos = isdbt.objects.all().order_by('-estado','nombre') #ordenamiento por nombre - no es necesario-
+    #obtener los datos por condicion
+    #datos_filtrados=isdbt.objects.filter(id=20) #filter(id__lte= 20) ---->       __lte(menor o igual) __gte(mayor o igual) __lt __gt (menor que , mayor que) __contains __exact 
+
+    #obtener un unico objeto
+    #unico = isdbt.objects.get(id=50)
+
+    #obtener elementos con limites
+    #limite= isdbt.objects.all()[:10] #[offset:limit]
+
+    datos1 = megafax.objects.all().order_by('-estado','nombre')
+
+    return render(request,'index.html',{'datos':datos,'datos1':datos1}) #,'datos_filtrados':datos_filtrados,'unico':unico,'limite':limite})
+
+"""
 def test (request):
     return HttpResponse('Funciona correcto')
 
@@ -12,7 +31,7 @@ def create (request):
     #datos = isdbt(nombre='ItelTV',ip='223.2.2.2',BR_min=2,canal_id='canal_1',estado=1)
     #datos.save()
     #datos = isdbt.objects.acreate(nombre='ItelTV',ip='223.2.2.2',BR_min=2,canal_id='canal_1',estado=1)
-    """
+    
     
     datos_1=isdbt(nombre='ITELTV HD',ip='0.0.0.0',BR_min=0.5,canal_id='canal_1',estado=0)
     datos_2=isdbt(nombre='AMERICA HD',ip='0.0.0.0',BR_min=0.5,canal_id='canal_2',estado=0)
@@ -205,7 +224,7 @@ def create (request):
     datos_93.save()
     datos_94.save()
     datos_95.save()
-    """
+ 
     return HttpResponse('CREATE')
 
 def delete(request): 
@@ -221,21 +240,6 @@ def delete(request):
     return HttpResponse('Borrado') 
 
 
-def query(request):
-    #obtener todos los elementos
-    datos = isdbt.objects.all().order_by('-estado') #ordenamiento por nombre - no es necesario-
-    #obtener los datos por condicion
-    #datos_filtrados=isdbt.objects.filter(id=20) #filter(id__lte= 20) ---->       __lte(menor o igual) __gte(mayor o igual) __lt __gt (menor que , mayor que) __contains __exact 
-
-    #obtener un unico objeto
-    #unico = isdbt.objects.get(id=50)
-
-    #obtener elementos con limites
-    #limite= isdbt.objects.all()[:10] #[offset:limit]
-
-    datos1 = megafax.objects.all().order_by('-estado')
-
-    return render(request,'index.html',{'datos':datos,'datos1':datos1}) #,'datos_filtrados':datos_filtrados,'unico':unico,'limite':limite})
 
 def actualiz(request):
 
@@ -244,3 +248,4 @@ def actualiz(request):
 
     dato.save()
     return HttpResponse('Actualizado')
+"""

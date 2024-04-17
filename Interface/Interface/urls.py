@@ -21,11 +21,14 @@ from django.urls import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.index, name='index'),
-    path('graf_isdbt/', views.graf_isdbt, name='graf_isdbt'),  
-    path('graf_megafax/', views.graf_megafax, name='graf_megafax'),
-    path('config/', views.config, name='config'),
-    path('principal/',include('index.urls')),
+    path('',include('index.urls')),
     path('graph_isdbt/',include('graficos_isdbt.urls')),
-    path('graph_megafax/',include('graficos_megafax.urls'))
+    path('graph_megafax/',include('graficos_megafax.urls')),
+    path('config/',include('configuracion.urls'))
 ]
+
+#path('graf_isdbt/', views.graf_isdbt, name='graf_isdbt'),  
+#path('graf_megafax/', views.graf_megafax, name='graf_megafax'),
+#path('principal/',include('index.urls')),
+#path('',views.index, name='index'),
+#path('config/', views.config, name='config'),

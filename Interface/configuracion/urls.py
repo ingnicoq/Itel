@@ -4,6 +4,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('',views.g_isdbt ,name='g_isdbt')
+    path('',views.config ,name='config')
 ]
 #path('delete/', views.delete, name='delete'),
