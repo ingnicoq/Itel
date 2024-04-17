@@ -25,5 +25,7 @@ urlpatterns = [
     path('graf_isdbt/', views.graf_isdbt, name='graf_isdbt'),  
     path('graf_megafax/', views.graf_megafax, name='graf_megafax'),
     path('config/', views.config, name='config'),
-    path('principal/',include('index.urls'))
+    path('principal/',include('index.urls')),
+    path('graph_isdbt/',include('graficos_isdbt.urls')),
+    path('graph_megafax/',include('graficos_megafax.urls'))
 ]

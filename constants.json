@@ -1,5 +1,6 @@
 { "ISDB-T":{
-    "nombre_db":"monitoreo_ISDBT",
+    "nombre_db":"monitoreo",
+    "port":3307,
     "cant_max":150,
     "url":"http://10.200.30.52/cgi-bin/refreshPrg.cgi",
     "login_key":"authorization",
@@ -11,7 +12,8 @@
     "encab_msj":"ISDB-T:"
     },
     "Megafax":{
-        "nombre_db":"monitoreo_MEGAFAX",
+        "nombre_db":"monitoreo",
+        "port":3307,
         "cant_max":150,
         "url":"http://10.200.30.51/cgi-bin/refreshPrg.cgi",
         "login_key":"authorization",

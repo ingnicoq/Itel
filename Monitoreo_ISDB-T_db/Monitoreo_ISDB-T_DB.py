@@ -14,6 +14,7 @@ sys.path.append(ruta_padre)
 import autostart_monitoreo as ast
 
 NOMBRE_DB = ast.NOMBRE_DB_ISDBT
+PORT = ast.PORT_ISDBT
 CANTIDAD_MAX = ast.CANTIDAD_MAX_ISDBT
 URL = ast.URL_ISDBT
 login_key = ast.login_key_ISDBT
@@ -36,7 +37,8 @@ pd.set_option('display.max_columns', None)
 conexion = mysql.connector.connect(
     host="localhost",
     user="root",
-    database=NOMBRE_DB
+    database=NOMBRE_DB,
+    port=PORT
 )
 cursor = conexion.cursor()
 
@@ -49,29 +51,38 @@ class Colores:
     VERDE = '\033[92m'
 
 
+def escribir_log(texto):
+    try:
+        now = datetime.now()
+        texto=texto + "--> ISDBT"
+        cursor.execute(f"INSERT INTO index_log (year, month, day, hour, min, sec, log) VALUES (%s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, texto))
+        conexion.commit()
+        return 0
+    except:
+        print(str(now)+"--->Error en escribir LOG")
+        return 
+
+
 def leer_estado(id):
     try:
-        cursor.execute(f"SELECT estado FROM `canal_datos` WHERE id=%s",[str(id)])
+        cursor.execute(f"SELECT estado FROM `index_isdbt` WHERE id=%s",[str(id)])
         valor=cursor.fetchone()[0]
         return valor
     except Exception as e:
-        now = datetime.now()
         texto='Error leer_estado: '+str(e)
-        cursor.execute(f"INSERT INTO log (year, month, day, hour, min, sec, log) VALUES (%s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, texto))
-        conexion.commit()
-        return 0
+        escribir_log(texto)
+        return 
 
 
 def escribir_estado(id,estado):
     try:
-        cursor.execute(f"UPDATE canal_datos SET estado=%s WHERE id=%s",[str(estado),str(id)])
+        cursor.execute(f"UPDATE index_isdbt SET estado=%s WHERE id=%s",[str(estado),str(id)])
         return
     except Exception as e:
-        now = datetime.now()
         texto='Error escribir_estado: '+str(e)
-        cursor.execute(f"INSERT INTO log (year, month, day, hour, min, sec, log) VALUES (%s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, texto))
-        conexion.commit()
-        return
+        escribir_log(texto)
+        return 
+
 
 
 def enviar_mensaje(lista,aux):
@@ -91,11 +102,9 @@ def enviar_mensaje(lista,aux):
         del resultado
         
     except Exception as e:
-        now = datetime.now()
         texto='Error envio Telegram: '+str(e)
-        cursor.execute(f"INSERT INTO log (year, month, day, hour, min, sec, log) VALUES (%s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, texto))
-        conexion.commit()
-        return
+        escribir_log(texto)
+        return 
 
 
 def replace_ascii(text):
@@ -110,11 +119,9 @@ def replace_ascii(text):
         return re.sub(r'%([0-9a-fA-F]+)', inner_replace, text)\
         
     except Exception as e:
-        now = datetime.now()
         texto='Error reemplazo caracter: '+str(e)
-        cursor.execute(f"INSERT INTO log (year, month, day, hour, min, sec, log) VALUES (%s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, texto))
-        conexion.commit()
-        return
+        escribir_log(texto)
+        return 
     
 
 def encontrar_BR(num):
@@ -130,11 +137,9 @@ def encontrar_BR(num):
         return valor
     
     except Exception as e:
-        now = datetime.now()
         texto='Error encontrar BR: '+str(e)
-        cursor.execute(f"INSERT INTO log (year, month, day, hour, min, sec, log) VALUES (%s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, texto))
-        conexion.commit()
-        return
+        escribir_log(texto)
+        return 
     
     
 def escribir_db(entrada, bitrate):
@@ -142,52 +147,45 @@ def escribir_db(entrada, bitrate):
     try:
         now = datetime.now()
         bitrate=round(bitrate,2)
-        cursor.execute("SELECT canal_id FROM canal_datos WHERE id = %s;", [str(entrada)])
+        cursor.execute("SELECT canal_id FROM index_isdbt WHERE id = %s;", [str(entrada)])
         tabla = cursor.fetchone()[0]
-        cursor.execute(f"INSERT INTO {tabla} (year, month, day, hour, min, sec, BR) VALUES (%s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, bitrate))
+        cursor.execute(f"INSERT INTO graficos_isdbt_br (year, month, day, hour, min, sec, BR,canal_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, bitrate,tabla))
         conexion.commit()
     except Exception as e:
-        now = datetime.now()
         texto='Error escribir DB: '+str(e)
-        cursor.execute(f"INSERT INTO log (year, month, day, hour, min, sec, log) VALUES (%s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, texto))
-        conexion.commit()
-        return
-
+        escribir_log(texto)
+        return 
 
 def consulta_ip():
     try:
-        cursor.execute("SELECT nombre, ip FROM canal_datos")
+        cursor.execute("SELECT nombre, ip FROM index_isdbt")
         tabla = cursor.fetchall()
         datos_ip = []
         for fila in tabla:
             datos_ip.append(fila)
         return datos_ip
     except Exception as e:
-        now = datetime.now()
         texto='Error consulta IP: '+str(e)
-        cursor.execute(f"INSERT INTO log (year, month, day, hour, min, sec, log) VALUES (%s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, texto))
-        conexion.commit()
-        return
+        escribir_log(texto)
+        return 
 
 
 def consulta_BR_min():
     try:
-        cursor.execute("SELECT id, BR_min FROM canal_datos")
+        cursor.execute("SELECT id, BR_min FROM index_isdbt")
         tabla = cursor.fetchall()
         datos_br_min = []
         for fila in tabla:
             datos_br_min.append(fila)
         return datos_br_min
     except Exception as e:
-        now = datetime.now()
         texto='Error consulta BR Min: '+str(e)
-        cursor.execute(f"INSERT INTO log (year, month, day, hour, min, sec, log) VALUES (%s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, texto))
-        conexion.commit()
-        return
+        escribir_log(texto)
+        return 
     
 def encontrar_nombre(numero):
     try:
-        cursor.execute("SELECT nombre FROM canal_datos WHERE id = %s;", [str(numero)])
+        cursor.execute("SELECT nombre FROM index_isdbt WHERE id = %s;", [str(numero)])
         nombre = cursor.fetchone()[0]
         return nombre
     except:
@@ -195,24 +193,20 @@ def encontrar_nombre(numero):
     
 def verificacion_tabla(posicion,nombre_mux):
     try:
-        cursor.execute("SELECT MAX(id) FROM canal_datos")
+        cursor.execute("SELECT MAX(id) FROM index_isdbt")
         max_channel=cursor.fetchall()[0]
         if posicion < max_channel[0]+1:
             nombre=encontrar_nombre(posicion)
             if nombre_mux != nombre:
-                cursor.execute("UPDATE canal_datos SET nombre = %s WHERE nombre = %s",(nombre_mux,nombre))
+                cursor.execute("UPDATE index_isdbt SET nombre = %s WHERE nombre = %s",(nombre_mux,nombre))
                 conexion.commit()
         else:
-            comando = f'''CREATE TABLE IF NOT EXISTS canal_{posicion} (id INT AUTO_INCREMENT PRIMARY KEY,year INT, month INT, day INT, hour INT, min INT, sec INT, BR FLOAT)'''
-            cursor.execute(comando)
-            cursor.execute(f"INSERT INTO canal_datos (nombre,ip,BR_min,canal_id) VALUES (%s, %s, %s, %s)",(nombre_mux, "0.0.0.0", str(0.5), f"canal_{posicion}"))
+            cursor.execute(f"INSERT INTO index_isdbt (id,nombre,ip,BR_min,canal_id) VALUES (%s,%s, %s, %s, %s)",(str(max_channel[0]+1),nombre_mux, "0.0.0.0", str(0.5), f"canal_{posicion}"))
             conexion.commit()
     except Exception as e:
-        now = datetime.now()
         texto='Error verificacion tabla: '+str(e)
-        cursor.execute(f"INSERT INTO log (year, month, day, hour, min, sec, log) VALUES (%s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, texto))
-        conexion.commit()
-        return
+        escribir_log(texto)
+        return 
 
 
 
@@ -253,9 +247,7 @@ while True:
             else:
                 print(f"Error al realizar la solicitud. Código de estado: {respuesta.status_code}")
         except Exception as e:
-            now = datetime.now()
-            cursor.execute(f"INSERT INTO log (year, month, day, hour, min, sec, log) VALUES (%s, %s, %s, %s, %s, %s, 'Error Lectura de Mux:'%s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, e))
-            conexion.commit()
+            escribir_log(e)
             continue
         time.sleep(0.05)
 
@@ -284,10 +276,9 @@ while True:
         df['IP'] = df['Nombre Canal'].map(ips_dict.get)
         #print('Debug MSJ: Fin Acondicionamiento de datos')
     except Exception as e:
-        now = datetime.now()
         texto='Error formateo de datos: '+str(e)
-        cursor.execute(f"INSERT INTO log (year, month, day, hour, min, sec, log) VALUES (%s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, texto))
-        conexion.commit()
+        escribir_log(texto)
+        continue 
 
     #system("clear")
     #print(f"|{Colores.SUBRAYADO}{Colores.NEGRITA}{'Nombre del Canal':<30}|{'BR MIN':<10}|{'Bit Rate':<10}|{'IP':>17}{Colores.RESET}|")    
@@ -328,10 +319,8 @@ while True:
 
         except Exception as e:
             print(e,row['Nombre Canal'])
-            now = datetime.now()
             texto='Error procesamiento de datos: '+str(e)
-            cursor.execute(f"INSERT INTO log (year, month, day, hour, min, sec, log) VALUES (%s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, texto))
-            conexion.commit()
+            escribir_log(texto)
             continue
 
     #print('Debug MSJ: FIN FOR sobre DF')
@@ -358,10 +347,8 @@ while True:
             enviar_mensaje(canales_operativos,2)
 
     except Exception as e:
-        now = datetime.now()
         texto='Error analisis de datos para msj: '+str(e)
-        cursor.execute(f"INSERT INTO log (year, month, day, hour, min, sec, log) VALUES (%s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, texto))
-        conexion.commit()
+        escribir_log(texto)
 
 
     #print('Debug MSJ: Inicio Borrado variables')
@@ -374,7 +361,9 @@ while True:
         del canales_conrtados
         del canales_operativos
     except:
-        print('Error al borrar variables')
+        texto="Error el borrar variables"
+        print(texto)
+        escribir_log(texto)
         continue
 
     #print('Debug MSJ: Fin Bucle While')

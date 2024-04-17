@@ -26,4 +26,15 @@ class megafax(models.Model):
         return self.name
     
 
+class log(models.Model):
+    year = models.IntegerField()
+    month = models.IntegerField()
+    day = models.IntegerField()
+    hour = models.IntegerField()
+    min = models.IntegerField()
+    sec = models.IntegerField()
+    log = models.TextField(max_length=500)
 
+
+    def __str__(self):
+        return self.name

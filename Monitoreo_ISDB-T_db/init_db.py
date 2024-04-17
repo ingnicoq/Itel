@@ -11,6 +11,7 @@ sys.path.append(ruta_padre)
 import autostart_monitoreo as ast
 
 NOMBRE_DB = ast.NOMBRE_DB_ISDBT
+PORT=ast.PORT_ISDBT
 CANTIDAD_MAX = ast.CANTIDAD_MAX_ISDBT
 URL = ast.URL_ISDBT
 login_key = ast.login_key_ISDBT
@@ -22,11 +23,12 @@ NOMBRE_PROCESO = ast.NOMBRE_PROCESO_ISDBT
 ENCABEZ_MSJ = ast.ENCABEZ_MSJ_ISDBT
 
 
-def verificar_base_de_datos(host, usuario, nombre_base_datos):
+def verificar_base_de_datos(host, usuario, nombre_base_datos,puerto):
     try:
         conexion = mysql.connector.connect(
             host=host,
             user=usuario,
+            port = puerto
         )
         cursor = conexion.cursor()
 
@@ -104,23 +106,17 @@ def creacion_db(nombre_db):
 
 
 def generar_canal_datos():
-    comando = f'''CREATE TABLE IF NOT EXISTS canal_datos (id INT AUTO_INCREMENT PRIMARY KEY,nombre VARCHAR(50), ip VARCHAR(20), BR_min FLOAT, canal_id VARCHAR(10), estado INT)'''
+    comando = f'''CREATE TABLE IF NOT EXISTS index_isdbt (id INT AUTO_INCREMENT PRIMARY KEY,nombre VARCHAR(50), ip VARCHAR(20), BR_min FLOAT, canal_id VARCHAR(10), estado INT)'''
     cursor.execute(comando)
 
 
 def generar_log():
-    comando = f'''CREATE TABLE IF NOT EXISTS log (id INT AUTO_INCREMENT PRIMARY KEY,year INT, month INT, day INT, hour INT, min INT, sec INT,log TEXT)'''
+    comando = f'''CREATE TABLE IF NOT EXISTS index_log (id INT AUTO_INCREMENT PRIMARY KEY,year INT, month INT, day INT, hour INT, min INT, sec INT,log TEXT)'''
     cursor.execute(comando)
 
 
-def generar_tablas(cantidad):
-    for i in range(1,cantidad+1):
-        comando = f'''CREATE TABLE IF NOT EXISTS canal_{i} (id INT AUTO_INCREMENT PRIMARY KEY,year INT, month INT, day INT, hour INT, min INT, sec INT, BR FLOAT)'''
-        cursor.execute(comando)
-
-
-def insertar_datos_canal_datos(nombre,ip,br_min,canal_id): 
-    cursor.execute("INSERT INTO canal_datos (nombre,ip,BR_min,canal_id,estado) VALUES (%s,%s,%s,%s,0)", (nombre, ip, br_min,canal_id))
+def insertar_datos_canal_datos(id, nombre,ip,br_min,canal_id): 
+    cursor.execute("INSERT INTO index_isdbt (id,nombre,ip,BR_min,canal_id,estado) VALUES (%s,%s,%s,%s,%s,0)", (id,nombre, ip, br_min,canal_id))
 
 def buscar_en_CSV(canal):
     df = leer_csv()
@@ -129,8 +125,66 @@ def buscar_en_CSV(canal):
             return row['ip'],float(row['BR_min'])
     return '0.0.0.0',0.5  
   
+def existe_tabla_index():
+    conexion = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        database=NOMBRE_DB,
+        port=PORT
+    )
+
+    cursor = conexion.cursor()
+
+    cursor.execute("SHOW TABLES")
+    tablas = cursor.fetchall()
+    nombre = 'index_isdbt'
+    for tabname in tablas:
+        if nombre in tabname:
+            return True
+
+    return False
+
+
+def existe_tabla_log():
+    conexion = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        database=NOMBRE_DB,
+        port=PORT
+    )
+
+    cursor = conexion.cursor()
+
+    cursor.execute("SHOW TABLES")
+    tablas = cursor.fetchall()
+    nombre = 'index_log'
+    for tabname in tablas:
+        if nombre in tabname:
+            return True
+
+    return False
+
+def buscar_canal_tabla(canal):
+    try:
+        cursor.execute(f"SELECT id FROM `index_isdbt` WHERE nombre=%s",[str(canal)])
+        valor=cursor.fetchone()[0]
+        if valor!="":
+            return True
+    except:
+        return False
+
+def buscar_registro_tabla(posicion):
+    try:
+        cursor.execute(f"SELECT nombre FROM `index_isdbt` WHERE id=%s",[str(posicion)])
+        valor=cursor.fetchone()[0]
+        if valor!="":
+            return True
+    except:
+        return False
+
+
 try:
-    if not verificar_base_de_datos("localhost", "root", NOMBRE_DB):
+    if not verificar_base_de_datos("localhost", "root", NOMBRE_DB,PORT):
 
         conexion = mysql.connector.connect(
             host="localhost",
@@ -139,28 +193,46 @@ try:
 
         cursor = conexion.cursor()
         creacion_db(NOMBRE_DB)
-        conexion = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            database=NOMBRE_DB
-        )
-        cursor = conexion.cursor()
-        canales = leer_datos_mux()
-        longitud = len(canales)
-        generar_tablas(longitud)
-        generar_canal_datos()
-        generar_log()
-        i=1
-        for canal in canales:
-            ip,br = buscar_en_CSV(canal)
-            insertar_datos_canal_datos(canal,ip,br,str(f"canal_{i}"))
-            i+=1
-            conexion.commit()
+        cursor.close()
+        conexion.close()
+        
     conexion = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            database=NOMBRE_DB
+            host='localhost',
+            user='root',
+            database=NOMBRE_DB,
+            port = 3307
         )
-            
+    cursor = conexion.cursor()
+    canales = leer_datos_mux()
+    longitud = len(canales)
+    if not existe_tabla_index():
+        generar_canal_datos()
+    if not existe_tabla_log():
+        generar_log()
+   
+    i=1
+    for canal in canales: 
+        if canal != None:  
+            if  buscar_registro_tabla(i):
+                if not buscar_canal_tabla(canal):
+                    
+                        ip,br = buscar_en_CSV(canal)
+                        insertar_datos_canal_datos(i,canal,ip,br,str(f"canal_{i}"))
+                        conexion.commit()
+            else:
+                
+                        ip,br = buscar_en_CSV(canal)
+                        insertar_datos_canal_datos(i,canal,ip,br,str(f"canal_{i}"))
+                        conexion.commit()
+        i+=1
+        
+    conexion = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        database=NOMBRE_DB
+        )
+    cursor.close()
+    conexion.close()
+        
 except Exception as e:
     print(f"Error en la inicializacion de la DB. ERROR: {e}")

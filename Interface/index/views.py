@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import isdbt,megafax
+from .models import isdbt,megafax,log
 from django.template.loader import render_to_string
 
 # Create your views here.
@@ -209,9 +209,15 @@ def create (request):
     return HttpResponse('CREATE')
 
 def delete(request): 
-    dato = isdbt.objects.get(id=52)
-    dato.delete()
+    #dato = isdbt.objects.get(id=52)
+    #dato.delete()
     #isdbt.objects.filter(nombre='ItelTV').delete()
+    dato=isdbt.objects.all()
+    dato.delete()
+    dato1=megafax.objects.all()
+    dato1.delete()
+    dato2=log.objects.all()
+    dato2.delete()
     return HttpResponse('Borrado') 
 
 

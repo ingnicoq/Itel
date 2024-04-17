@@ -9,6 +9,7 @@ df=pd.read_json("constants.json")
 
 
 NOMBRE_DB_MEGA = df["Megafax"]["nombre_db"]
+PORT_MEGA = df["Megafax"]["port"]
 CANTIDAD_MAX_MEGA = df["Megafax"]["cant_max"]
 URL_MEGA = df["Megafax"]["url"]
 login_key_MEGA = df["Megafax"]["login_key"]
@@ -22,6 +23,7 @@ ENCABEZ_MSJ_MEGA = df["Megafax"]["encab_msj"]
 
 
 NOMBRE_DB_ISDBT = df["ISDB-T"]["nombre_db"]
+PORT_ISDBT = df["ISDB-T"]["port"]
 CANTIDAD_MAX_ISDBT = df["ISDB-T"]["cant_max"]
 URL_ISDBT = df["ISDB-T"]["url"]
 login_key_ISDBT = df["ISDB-T"]["login_key"]
@@ -58,23 +60,25 @@ def terminar_process(pid):
 contador = 0
 if __name__ == "__main__":
 
-    script_path_mega = UBICACION_MEGA
-    process_name_mega = NOMBRE_PROCESO_MEGA 
-    pid_mega = start_process(script_path_mega)
-
     script_path_isdbt = UBICACION_ISDBT
     process_name_isdbt = NOMBRE_PROCESO_ISDBT 
     pid_isdbt = start_process(script_path_isdbt)
 
+    script_path_mega = UBICACION_MEGA
+    process_name_mega = NOMBRE_PROCESO_MEGA 
+    pid_mega = start_process(script_path_mega)
+
     while True:
-        if not check_process(pid_mega):
-            print(f"El proceso {process_name_mega} no está en ejecución. Reiniciando...")
-            pid = start_process(script_path_mega)
-            contador=0
-        
         if not check_process(pid_isdbt):
+            terminar_process(pid_isdbt)
             print(f"El proceso {process_name_isdbt} no está en ejecución. Reiniciando...")
             pid = start_process(script_path_isdbt)
+            contador=0
+
+        if not check_process(pid_mega):
+            terminar_process(pid_mega)
+            print(f"El proceso {process_name_mega} no está en ejecución. Reiniciando...")
+            pid = start_process(script_path_mega)
             contador=0
 
         if not contador < 5:
@@ -84,5 +88,6 @@ if __name__ == "__main__":
             terminar_process(pid_isdbt)
             pid=start_process(script_path_isdbt)
             contador=0
+
         time.sleep(60)
         contador+=1
