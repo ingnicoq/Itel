@@ -10,3 +10,26 @@
     align-items: flex-end;
     justify-content: end;
 }
+.resultado-busqueda{
+
+    height: 800px;
+
+}
+.form-select{
+    display: flex;
+    width: 60%;
+    margin-left: 200px;
+    background-color: rgb(33, 36, 41, 90%);
+    color: white;
+    
+}
+
+.cont_ppal{
+    display: flex;
+    width: 100%;
+
+}
+.col{
+    display: flex;
+    width: 70%;
+ }

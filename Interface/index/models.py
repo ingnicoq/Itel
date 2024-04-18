@@ -11,7 +11,7 @@ class isdbt(models.Model):
     estado = models.IntegerField(max_length=11)
     
     def __str__(self):
-        return self.name
+        return self.nombre
 
 
 class megafax(models.Model):

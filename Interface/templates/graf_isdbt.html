@@ -4,4 +4,39 @@
 
 {%block content%} 
     <h1>Graficos ISDB-T </h1>
+    <div id="cont_ppal" class="row align-items-start">
+        <div id="col" class="col">
+            <select id="select-canal" class="form-select" aria-label="Default select example">
+                <option value="" selected>SELECCIONAR CANAL</option>
+                {% for key,value in datos.items  %}
+                    <option value="{{value}}">{{key}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="col">
+            <button id="btn-buscar">Actualizar</button>
+        </div>
+    </div>
+    <div id="resultado-busqueda">
+        
+    </div>
+
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        
+        $(document).ready(function() {
+            $('#btn-buscar').click(function() {
+                var canalSeleccionado = $('#select-canal').val(); // Obtener el valor seleccionado del desplegable
+                console.log(canalSeleccionado)
+                // Realizar una solicitud AJAX para buscar en la base de datos
+                $.get('{% url 'busqueda' %}', { 'canal': canalSeleccionado }, function(data) {
+                    $('#resultado-busqueda').html(data); // Mostrar el resultado de la búsqueda
+                });
+            });
+            
+        });
+    </script>
+
 {%endblock%}
