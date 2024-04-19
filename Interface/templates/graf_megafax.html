@@ -1,7 +1,52 @@
 {% extends "./layouts/base.html" %}
 
-{%block title%} Graficos Megafax {%endblock%}
+{%block title%} Graficos MEGAFAX {%endblock%}
 
 {%block content%} 
-    <h1>Graficos Megafax </h1>
+    <h1 id="titulo">Graficos MEGAFAX </h1>
+    <div id="cont_ppal" class="row align-items-start">
+        <div id="col" class="col">
+            <select id="select-canal" class="form-select" aria-label="Default select example">
+                <option value="" selected>SELECCIONAR CANAL</option>
+                {% for key,value in datos.items  %}
+                    <option value="{{value}}">{{key}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div id="col" class="col">
+            <button id="btn-buscar" ></button>
+        </div>
+    </div>
+    <div id="resultado-busqueda">
+        
+    </div>
+
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function cargarContenido() {
+            var canalSeleccionado = 'ITELTV_HD'; // Obtener el valor seleccionado del desplegable
+        
+            $.get('{% url 'busqueda' %}', { 'canal': canalSeleccionado }, function(data) {
+                $('#resultado-busqueda').html(data); // Mostrar el resultado de la búsqueda
+            });
+        }
+        // Ejecuta la función cuando el documento esté listo
+        $(document).ready(function() {
+            cargarContenido(); // Llama a la función para cargar el contenido automáticamente al cargar la página
+        });
+
+        $(document).ready(function() {
+            $('#btn-buscar').click(function() {
+                var canalSeleccionado = $('#select-canal').val(); // Obtener el valor seleccionado del desplegable
+                // Realizar una solicitud AJAX para buscar en la base de datos
+                $.get('{% url 'busqueda_m' %}', { 'canal': canalSeleccionado }, function(data) {
+                    $('#resultado-busqueda').html(data); // Mostrar el resultado de la búsqueda
+                });
+            });
+            
+        });
+    </script>
+
 {%endblock%}

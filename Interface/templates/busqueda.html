@@ -12,8 +12,8 @@
 </head>
 <body>
     <hr></hr>
-    <div class="container text-center">
-        <div class="row align-items-start">
+    <div id="contenedor_ppal_graf" class="container text-center">
+        <div class="row justify-content-around">
             <div class='row'>
                 <div class="col">
                     <figure class="highcharts-figure">
@@ -43,11 +43,6 @@
         </div>
       </div>
     
-        
-            
-     
-
-
 
     <script type='application/javascript'>
         
@@ -64,7 +59,7 @@
             },
             xAxis: {
                 categories: {{ time7d|safe }},
-                tickInterval: 4 
+                tickInterval: 6 
             },
             yAxis: {
                 title: {
@@ -99,7 +94,7 @@
             },
             xAxis: {
                 categories: {{ time1d|safe }},
-                tickInterval: 5 
+                tickInterval: 6 
             },
             yAxis: {
                 title: {
@@ -134,7 +129,7 @@
             },
             xAxis: {
                 categories: {{ time1h|safe }},
-                tickInterval: 5 
+                tickInterval: 2 
             },
             yAxis: {
                 title: {

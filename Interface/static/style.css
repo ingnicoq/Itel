@@ -1,3 +1,46 @@
+/*
+{
+  font-family: "Gabarito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}*/
+.blockquote{
+    display: flex;
+}
+
+#foot{
+    flex-direction: column;
+    padding: 10px;
+}
+#foot_nombre{
+    padding-top: 10px;
+}
+.blockquote-footer{
+    padding-top: 28px;
+}
+
+
+h1{
+    font-family: "Gabarito", sans-serif;
+    font-optical-sizing:auto;
+    font-size: 42px;
+    font-weight: bolder;
+    font-style: normal;
+}
+
+#titulo{
+    padding-left: 5%;
+}
+
+.navbar-brand{
+    font-family: "Gabarito", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 20px;
+    font-weight:100;
+    font-style: normal;
+}
+
 .nav-link:hover{
     color: rgb(44, 100, 204);
 }
@@ -10,26 +53,104 @@
     align-items: flex-end;
     justify-content: end;
 }
-.resultado-busqueda{
 
-    height: 800px;
-
-}
 .form-select{
     display: flex;
-    width: 60%;
-    margin-left: 200px;
+    width: 50%;
+    margin-top: 6px;
+    margin-left: 50%;
+    margin-top: 5px;
     background-color: rgb(33, 36, 41, 90%);
     color: white;
     
 }
+#btn-buscar{
+    /* Establece el icono como fondo del botón */
+    background-image: url('img/sincronizar.png');
+    /* Ajusta el tamaño y la posición del icono */
+    background-size: cover;
+    background-position: center;
+    /* Opcional: ajusta el tamaño del botón para que se adapte al icono */
+    width: 46px; /* Ajusta el ancho según tus necesidades */
+    height: 50px; /* Ajusta la altura según tus necesidades */
+    /* Añade algún estilo adicional según tus preferencias */
+    border: none; /* Elimina el borde del botón */
+    cursor: pointer; /* Cambia el cursor al pasar por encima del botón */
+    padding-bottom: 5px;
+}
 
-.cont_ppal{
+#cont_ppal{
+    display: flex;
+    align-items: center;
+    height: 60px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+#col{
     display: flex;
     width: 100%;
-
-}
-.col{
-    display: flex;
-    width: 70%;
  }
+
+#resultado-busqueda{
+    display: flex;
+    align-content: center;
+    background-color:  white;
+    min-height: 600px;
+    padding: 0px;
+    margin: 5px;
+}
+#contenedor_ppal_graf{
+    display: flex;
+    align-items: center;
+    align-content: center;
+    background-color:  rgb(33, 36, 41, 90%);
+    padding: 25px;
+    width: 100%;
+}
+
+
+
+.highcharts-figure,
+.highcharts-data-table table {
+    min-width: 360px;
+    max-width: 900px;
+    margin: 1em auto;
+}
+
+.highcharts-data-table table {
+    font-family: Verdana, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #ebebeb;
+    margin: 10px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+.highcharts-data-table caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: #555;
+}
+
+.highcharts-data-table th {
+    font-weight: 600;
+    padding: 0.5em;
+}
+
+.highcharts-data-table td,
+.highcharts-data-table th,
+.highcharts-data-table caption {
+    padding: 0.5em;
+}
+
+.highcharts-data-table thead tr,
+.highcharts-data-table tr:nth-child(even) {
+    background: #f8f8f8;
+}
+
+.highcharts-data-table tr:hover {
+    background: #f1f7ff;
+}
+

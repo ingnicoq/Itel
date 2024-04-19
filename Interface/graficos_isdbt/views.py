@@ -91,7 +91,7 @@ def busqueda(request):
     for key,value in dicc1h.items():
         br1h.append(float(value[0]))
         cons1h.append(float(value[1]))
-        sub_fecha= key[5:13]
+        sub_fecha= key[11:16]
         time1h.append(sub_fecha)  
     
 
