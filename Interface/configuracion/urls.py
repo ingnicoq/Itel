@@ -4,6 +4,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('',views.config ,name='config')
+    path('',views.config ,name='config'),
+    path('actualizacion/',views.actualizacion ,name='actualizacion')
 ]
 #path('delete/', views.delete, name='delete'),

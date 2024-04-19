@@ -3,5 +3,60 @@
 {%block title%} Configuracion {%endblock%}
 
 {%block content%} 
-    <h1>Configuracion </h1>
+    <h1 id="titulo">Configuracion </h1>
+    <div id="slider-config" class="slide-container">
+        <label class="switch">
+            <input type="checkbox" id="toggle">
+            <span class="slider"></span>
+            <span class="option1">ISDB-T</span>
+            <span class="option2">MEGAFAX</span>
+        </label>
+    </div>
+    
+    <div>
+        <select id="select-canal_config" class="form-select" aria-label="Default select example">
+            <option value="" selected>SELECCIONAR CANAL</option>
+            {% for key, value in datos.items %}
+                <option value="{{ value }}">{{ key }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div id="contenedor_ppal_config" class="container">
+        <form action="{% url 'actualizacion'%}" method="post">
+            {% csrf_token %}
+            <input id="origen_config" type="text" name="origen" placeholder="" value="" style="display: none;" readonly>
+            <input id="eleccion_config" type="text" name="nombre" placeholder="SELECCION" value="" readonly>
+            <input id="ip_config" type="text" name="IP" placeholder="Nueva IP" >
+            <input id="BR_config" type="text" name="BR" placeholder="Nuevo BR_min">
+            <input id="enviar_config" type="submit" value="">
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#select-canal_config').change(function() {
+                var selectedOption = $(this).children("option:selected").text();
+                $('#eleccion_config').val(selectedOption);
+            });
+
+            $('#toggle').change(function() {
+                if ($(this).prop('checked')) {
+                    // Botón deslizante activado: mostrar opciones de datos2
+                    $('#select-canal_config').empty();
+                    $('#select-canal_config').append('<option value="" selected>SELECCIONAR CANAL</option>');
+                    {% for key, value in datos2.items %}
+                        $('#select-canal_config').append(`<option value="{{ value }}">{{ key }}</option>`);
+                    {% endfor %}
+                } else {
+                    // Botón deslizante desactivado: mostrar opciones de datos1
+                    $('#select-canal_config').empty();
+                    $('#select-canal_config').append('<option value="" selected>SELECCIONAR CANAL</option>');
+                    {% for key, value in datos.items %}
+                        $('#select-canal_config').append(`<option value="{{ value }}">{{ key }}</option>`);
+                    {% endfor %}
+                }
+            });
+        });
+    </script>
 {%endblock%}
