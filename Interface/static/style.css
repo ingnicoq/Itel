@@ -45,10 +45,12 @@ h1{
 .nav-link:hover{
     color: rgb(44, 140, 204);
 }
+
 .navbar-brand{
     margin: 15px;
     margin-left: 50px;
 }
+
 .navbar-nav{
     margin-left: 250px;
     align-items: flex-end;
@@ -110,7 +112,7 @@ h1{
 #col{
     display: flex;
     width: 100%;
- }
+}
 
 #resultado-busqueda{
     display: flex;
@@ -125,11 +127,10 @@ h1{
     display: flex;
     align-content: center;
     background-color:  white;
-    min-height: 500px;
     padding: 0px;
-    margin: 5px;
+    padding-left: 600px;
+    margin-top: 40px;
 }
-
 
 #contenedor_ppal_graf{
     display: flex;
@@ -139,8 +140,6 @@ h1{
     padding: 25px;
     width: 100%;
 }
-
-
 
 .highcharts-figure,
 .highcharts-data-table table {
@@ -245,6 +244,7 @@ input:checked + .slider {
     color: rgb(70, 183, 228);
 
 }
+
 .option2 {
     position: absolute;
     display: inline-block;
@@ -267,27 +267,26 @@ input:checked + .slider ~ .option1 {
 input:checked + .slider ~ .option2 {
     opacity: 1;
 }
-#contenedor_ppal_config{
-    padding-left: 600px;
-    margin-top: 40px;
-}
 
 #eleccion_config{
     background-color: rgb(33, 36, 41, 90%) ;
     color: white;
     margin: 10px;
 }
+
 #ip_config{
     background-color: rgb(33, 36, 41, 90%) ;
     color: white;
     margin: 10px;
     margin-left: 80px;
 }
+
 #BR_config{
     background-color: rgb(33, 36, 41, 90%) ;
     color: white;
     margin: 10px;
 }
+
 #enviar_config{
     background-image: url('img/guardar.png');
     background-size: cover;
@@ -301,4 +300,26 @@ input:checked + .slider ~ .option2 {
     padding-bottom: 5px;
     margin: 30px;
     margin-left: 250px;
+}
+
+#msj_error{
+    display: flex;
+    justify-content: center;
+}
+
+.messages{
+    font-family: "Gabarito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bold;
+    font-style: normal;
+    padding-left: 450px;
+}
+
+#log{
+    font-family: "Gabarito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bold;
+    font-style: normal;
+    padding-left: 100px;
+    min-height: 350px;
 }

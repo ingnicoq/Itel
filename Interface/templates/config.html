@@ -21,6 +21,7 @@
             {% endfor %}
         </select>
     </div>
+    
     <div id="contenedor_ppal_config" class="container">
         <form action="{% url 'actualizacion'%}" method="post">
             {% csrf_token %}
@@ -30,33 +31,71 @@
             <input id="BR_config" type="text" name="BR" placeholder="Nuevo BR_min">
             <input id="enviar_config" type="submit" value="">
         </form>
+        
     </div>
+    
+    <div id="msj_error">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                {% if message.tags == 'error' and 'NO GUARDADO:' in message.message %}
+                    <li style="color: red">{{ message }}</li>
+                {% else %}
+                    <li style="color: green">{{ message }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    <div id="log">
+        <h2>Logs</h2>
+        <ul id="ul_log">
+            {%for items in log%}
+            <li>{{items.day}}/{{items.month}}/{{items.year}} {{items.hour}}:{{items.min}}:{{items.sec}} --- {{items.log}}</li>
+            {%endfor%}
+        </ul>
+    </div>
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
+            var origen = 'ISDBT'; // Declarar la variable fuera de la función
+    
             $('#select-canal_config').change(function() {
                 var selectedOption = $(this).children("option:selected").text();
                 $('#eleccion_config').val(selectedOption);
+                $('#origen_config').val(origen); // Asignar el valor de origen al input
             });
-
+    
             $('#toggle').change(function() {
                 if ($(this).prop('checked')) {
-                    // Botón deslizante activado: mostrar opciones de datos2
                     $('#select-canal_config').empty();
                     $('#select-canal_config').append('<option value="" selected>SELECCIONAR CANAL</option>');
                     {% for key, value in datos2.items %}
                         $('#select-canal_config').append(`<option value="{{ value }}">{{ key }}</option>`);
                     {% endfor %}
+                    origen = 'MEGAFAX'; // Asignar el valor a la variable
                 } else {
-                    // Botón deslizante desactivado: mostrar opciones de datos1
                     $('#select-canal_config').empty();
                     $('#select-canal_config').append('<option value="" selected>SELECCIONAR CANAL</option>');
                     {% for key, value in datos.items %}
                         $('#select-canal_config').append(`<option value="{{ value }}">{{ key }}</option>`);
                     {% endfor %}
+                    origen = 'ISDBT'; // Asignar el valor a la variable
                 }
             });
+
+            $(document).ready(function() {
+                function actualizarTabla() {
+                    $.get('{% url 'act_log' %}', function(data) {
+                        $('#ul_log').html($(data).find('#ul_log').html());
+                    });
+                }
+            
+                setInterval(actualizarTabla, 10000); 
+            });
+
         });
     </script>
 {%endblock%}
