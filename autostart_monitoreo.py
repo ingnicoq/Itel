@@ -4,6 +4,7 @@ import pandas as pd
 import psutil
 import signal
 import os
+import limpiar_registros
 
 df=pd.read_json("constants.json")
 
@@ -56,7 +57,7 @@ def terminar_process(pid):
     except ProcessLookupError:
         print("El proceso con PID {} no fue encontrado.".format(pid))
     
-
+contador_borrado = 0
 contador = 0
 if __name__ == "__main__":
 
@@ -89,5 +90,10 @@ if __name__ == "__main__":
             pid=start_process(script_path_isdbt)
             contador=0
 
+        if not contador_borrado < 1440:
+            limpiar_registros
+            contador_borrado = 0
+        
         time.sleep(60)
         contador+=1
+        contador_borrado+=1
