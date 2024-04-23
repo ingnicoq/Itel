@@ -12,18 +12,24 @@
                     <tr>
                       <th scope="col">Canal</th>
                       <th scope="col">IP</th>
-                      <th scope="col">BitRate</th>
+                      <th scope="col">BitRate Min</th>
+                      <th scope="col">BitRate Live</th>
                       <th scope="col">Estado</th>
                     </tr>
 
                   </thead>
 
                   <tbody>
-                    {%for item in datos %}
+                    {%for item in datos2 %}
                     <tr>
                       <th scope="row">{{item.nombre}}</th>
                       <td>{{item.ip}}</td>
-                      <td>{{item.BR_min}}</td>
+                      <td>{{item.br_min}}</td>
+                      {% if item.br_vivo < item.br_min %}
+                      <td style="color: red;">{{item.br_vivo}} </td>
+                      {% else %}
+                      <td style="color: green;">{{item.br_vivo }}</td>
+                      {% endif %}  
                       {% if item.estado%}
                       <td style="color: red;">CAIDO</td>
                       {% else %}
@@ -42,12 +48,13 @@
         </div>
         <table id="tabla-megafax" class="table table-dark table-striped">
             <thead>
-                <tr>
-                  <th scope="col">Canal</th>
-                  <th scope="col">IP</th>
-                  <th scope="col">BitRate</th>
-                  <th scope="col">Estado</th>
-                </tr>
+              <tr>
+                <th scope="col">Canal</th>
+                <th scope="col">IP</th>
+                <th scope="col">BitRate Min</th>
+                <th scope="col">BitRate Live</th>
+                <th scope="col">Estado</th>
+              </tr>
 
               </thead>
               <tbody>
@@ -55,7 +62,12 @@
                 <tr>
                   <th scope="row">{{item.nombre}}</th>
                   <td>{{item.ip}}</td>
-                  <td>{{item.BR_min}}</td>
+                  <td>{{item.br_min}}</td>
+                  {% if item.br_vivo < item.br_min %}
+                  <td style="color: red;">{{item.br_vivo}} </td>
+                  {% else %}
+                  <td style="color: green;">{{item.br_vivo }}</td>
+                  {% endif %}  
                   {% if item.estado%}
                   <td style="color: red;">CAIDO</td>
                   {% else %}

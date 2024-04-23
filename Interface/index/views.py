@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import isdbt,megafax,log
 from django.template.loader import render_to_string
+from graficos_isdbt.models import BR as BR_ISDBT
+from graficos_megafax.models import BR as BR_MEGA
 
 # Create your views here.
 
@@ -10,6 +12,16 @@ from django.template.loader import render_to_string
 def query(request):
     #obtener todos los elementos
     datos = isdbt.objects.all().order_by('-estado','nombre') #ordenamiento por nombre - no es necesario-
+    
+    datos2=[]
+    i=0
+    for items in datos:
+        result = BR_ISDBT.objects.filter(canal_id = items.canal_id).order_by('-id')[:1]
+        for elementos in result:
+            br_vivo = elementos.BR
+        datos2.append({'nombre':items.nombre,'ip':items.ip,'br_min':items.BR_min,'br_vivo':br_vivo,'estado':items.estado})
+        i+=1
+
     #obtener los datos por condicion
     #datos_filtrados=isdbt.objects.filter(id=20) #filter(id__lte= 20) ---->       __lte(menor o igual) __gte(mayor o igual) __lt __gt (menor que , mayor que) __contains __exact 
 
@@ -20,8 +32,16 @@ def query(request):
     #limite= isdbt.objects.all()[:10] #[offset:limit]
 
     datos1 = megafax.objects.all().order_by('-estado','nombre')
+    datos3=[]
+    i=0
+    for items in datos1:
+        result = BR_MEGA.objects.filter(canal_id = items.canal_id).order_by('-id')[:1]
+        for elementos in result:
+            br_vivo = elementos.BR
+        datos3.append({'nombre':items.nombre,'ip':items.ip,'br_min':items.BR_min,'br_vivo':br_vivo,'estado':items.estado})
+        i+=1
 
-    return render(request,'index.html',{'datos':datos,'datos1':datos1}) #,'datos_filtrados':datos_filtrados,'unico':unico,'limite':limite})
+    return render(request,'index.html',{'datos2':datos2,'datos1':datos3}) #,'datos_filtrados':datos_filtrados,'unico':unico,'limite':limite})
 
 """
 def test (request):
