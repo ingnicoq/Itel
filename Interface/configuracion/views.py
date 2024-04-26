@@ -78,5 +78,5 @@ def actualizacion(request):
     return redirect('config')
 
 def act_log(request):
-    datos = log.objects.all().order_by('id')
+    datos = log.objects.all().order_by('-id')
     return render(request,'config.html',{'log':datos})

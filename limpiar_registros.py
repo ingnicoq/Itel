@@ -47,61 +47,63 @@ conexion_ISDBT = mysql.connector.connect(
     port=PORT_ISDBT
 )
 cursor_ISDBT = conexion_ISDBT.cursor()
-
-cursor_ISDBT.execute(f"SELECT * FROM `graficos_isdbt_br` ORDER BY id ASC LIMIT 1")
-datos_ISDBT=cursor_ISDBT.fetchone()
-fecha_antigua=datetime(datos_ISDBT[1],datos_ISDBT[2],datos_ISDBT[3],datos_ISDBT[4],datos_ISDBT[5],datos_ISDBT[6])
-cursor_ISDBT.execute(f"SELECT * FROM `graficos_isdbt_br` ORDER BY id DESC LIMIT 1")
-datos_ISDBT=cursor_ISDBT.fetchone()
-fecha_actual=datetime(datos_ISDBT[1],datos_ISDBT[2],datos_ISDBT[3],datos_ISDBT[4],datos_ISDBT[5],datos_ISDBT[6])
-fecha_borrado = fecha_actual - timedelta(days=10)
-cursor_ISDBT.execute(f"SELECT * FROM `graficos_isdbt_br` ORDER BY id ASC")
-todo=cursor_ISDBT.fetchall()
-id_min=0
-for elemento in todo:
-    fecha=datetime(elemento[1],elemento[2],elemento[3],elemento[4],elemento[5],elemento[6])
-    if fecha < fecha_borrado:
-        id_min=elemento[0]
-if id_min!=0 :
-    cursor_ISDBT.execute(f"DELETE FROM `graficos_isdbt_br` WHERE id<id_min")
-
-
-#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-cursor_MEGA.execute(f"SELECT * FROM `graficos_megafax_br` ORDER BY id ASC LIMIT 1")
-datos_MEGA=cursor_MEGA.fetchone()
-fecha_antigua=datetime(datos_MEGA[1],datos_MEGA[2],datos_MEGA[3],datos_MEGA[4],datos_MEGA[5],datos_MEGA[6])
-cursor_MEGA.execute(f"SELECT * FROM `graficos_megafax_br` ORDER BY id DESC LIMIT 1")
-datos_MEGA=cursor_MEGA.fetchone()
-fecha_actual=datetime(datos_MEGA[1],datos_MEGA[2],datos_MEGA[3],datos_MEGA[4],datos_MEGA[5],datos_MEGA[6])
-fecha_borrado = fecha_actual - timedelta(days=10)
-cursor_MEGA.execute(f"SELECT * FROM `graficos_isdbt_br` ORDER BY id ASC")
-todo=cursor_MEGA.fetchall()
-for elemento in todo:
-    fecha=datetime(elemento[1],elemento[2],elemento[3],elemento[4],elemento[5],elemento[6])
-    if fecha < fecha_borrado:
-        id_min=elemento[0]
-if id_min!=0 :
-    cursor_MEGA.execute(f"DELETE FROM `graficos_isdbt_br` WHERE id<id_min")
+try:
+    cursor_ISDBT.execute(f"SELECT * FROM `graficos_isdbt_br` ORDER BY id ASC LIMIT 1")
+    datos_ISDBT=cursor_ISDBT.fetchone()
+    fecha_antigua=datetime(datos_ISDBT[1],datos_ISDBT[2],datos_ISDBT[3],datos_ISDBT[4],datos_ISDBT[5],datos_ISDBT[6])
+    cursor_ISDBT.execute(f"SELECT * FROM `graficos_isdbt_br` ORDER BY id DESC LIMIT 1")
+    datos_ISDBT=cursor_ISDBT.fetchone()
+    fecha_actual=datetime(datos_ISDBT[1],datos_ISDBT[2],datos_ISDBT[3],datos_ISDBT[4],datos_ISDBT[5],datos_ISDBT[6])
+    fecha_borrado = fecha_actual - timedelta(days=10)
+    cursor_ISDBT.execute(f"SELECT * FROM `graficos_isdbt_br` ORDER BY id ASC")
+    todo=cursor_ISDBT.fetchall()
+    id_min=0
+    for elemento in todo:
+        fecha=datetime(elemento[1],elemento[2],elemento[3],elemento[4],elemento[5],elemento[6])
+        if fecha < fecha_borrado:
+            id_min=elemento[0]
+    if id_min!=0 :
+        cursor_ISDBT.execute(f"DELETE FROM `graficos_isdbt_br` WHERE id<id_min")
 
 
-#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-cursor_ISDBT.execute(f"SELECT * FROM `index_log` ORDER BY id ASC LIMIT 1")
-datos_ISDBT=cursor_ISDBT.fetchone()
-fecha_antigua=datetime(datos_ISDBT[1],datos_ISDBT[2],datos_ISDBT[3],datos_ISDBT[4],datos_ISDBT[5],datos_ISDBT[6])
-cursor_ISDBT.execute(f"SELECT * FROM `index_log` ORDER BY id DESC LIMIT 1")
-datos_ISDBT=cursor_ISDBT.fetchone()
-fecha_actual=datetime(datos_ISDBT[1],datos_ISDBT[2],datos_ISDBT[3],datos_ISDBT[4],datos_ISDBT[5],datos_ISDBT[6])
-fecha_borrado = fecha_actual - timedelta(days=10)
-cursor_ISDBT.execute(f"SELECT * FROM `index_log` ORDER BY id ASC")
-todo=cursor_ISDBT.fetchall()
-id_min=0
-for elemento in todo:
-    fecha=datetime(elemento[1],elemento[2],elemento[3],elemento[4],elemento[5],elemento[6])
-    if fecha < fecha_borrado:
-        id_min=elemento[0]
+    cursor_MEGA.execute(f"SELECT * FROM `graficos_megafax_br` ORDER BY id ASC LIMIT 1")
+    datos_MEGA=cursor_MEGA.fetchone()
+    fecha_antigua=datetime(datos_MEGA[1],datos_MEGA[2],datos_MEGA[3],datos_MEGA[4],datos_MEGA[5],datos_MEGA[6])
+    cursor_MEGA.execute(f"SELECT * FROM `graficos_megafax_br` ORDER BY id DESC LIMIT 1")
+    datos_MEGA=cursor_MEGA.fetchone()
+    fecha_actual=datetime(datos_MEGA[1],datos_MEGA[2],datos_MEGA[3],datos_MEGA[4],datos_MEGA[5],datos_MEGA[6])
+    fecha_borrado = fecha_actual - timedelta(days=10)
+    cursor_MEGA.execute(f"SELECT * FROM `graficos_isdbt_br` ORDER BY id ASC")
+    todo=cursor_MEGA.fetchall()
+    for elemento in todo:
+        fecha=datetime(elemento[1],elemento[2],elemento[3],elemento[4],elemento[5],elemento[6])
+        if fecha < fecha_borrado:
+            id_min=elemento[0]
+    if id_min!=0 :
+        cursor_MEGA.execute(f"DELETE FROM `graficos_isdbt_br` WHERE id<id_min")
 
-if id_min!=0 :
-    cursor_MEGA.execute(f"DELETE FROM `index_log` WHERE id<id_min")
 
+    #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    cursor_ISDBT.execute(f"SELECT * FROM `index_log` ORDER BY id ASC LIMIT 1")
+    datos_ISDBT=cursor_ISDBT.fetchone()
+    fecha_antigua=datetime(datos_ISDBT[1],datos_ISDBT[2],datos_ISDBT[3],datos_ISDBT[4],datos_ISDBT[5],datos_ISDBT[6])
+    cursor_ISDBT.execute(f"SELECT * FROM `index_log` ORDER BY id DESC LIMIT 1")
+    datos_ISDBT=cursor_ISDBT.fetchone()
+    fecha_actual=datetime(datos_ISDBT[1],datos_ISDBT[2],datos_ISDBT[3],datos_ISDBT[4],datos_ISDBT[5],datos_ISDBT[6])
+    fecha_borrado = fecha_actual - timedelta(days=10)
+    cursor_ISDBT.execute(f"SELECT * FROM `index_log` ORDER BY id ASC")
+    todo=cursor_ISDBT.fetchall()
+    id_min=0
+    for elemento in todo:
+        fecha=datetime(elemento[1],elemento[2],elemento[3],elemento[4],elemento[5],elemento[6])
+        if fecha < fecha_borrado:
+            id_min=elemento[0]
+
+    if id_min!=0 :
+        cursor_MEGA.execute(f"DELETE FROM `index_log` WHERE id<id_min")
+
+except:
+    print("Error al borrar")
