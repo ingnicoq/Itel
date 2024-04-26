@@ -85,7 +85,7 @@ DATABASES = {
         'NAME': 'monitoreo',
         'USER': 'root',
         'PASSWORD': '',
-        'HOST': 'localhost',  # O la dirección IP de tu servidor de base de datos
+        'HOST': '127.0.0.1',  # O la dirección IP de tu servidor de base de datos
         'PORT': '3307',  # El puerto predeterminado de MariaDB es 3306
     }
 }

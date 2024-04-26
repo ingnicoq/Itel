@@ -15,7 +15,6 @@ class isdbt(models.Model):
 
 
 class megafax(models.Model):
-    #nombre_isdbt = models.ForeignKey(isdbt, on_delete=models.CASCADE) Clave foranea enlazada a la primary key de la tabla isdbt , si se borra la clave foranea se borran en cascada todos los datos relacionados
     nombre = models.CharField(max_length=50)
     ip = models.CharField(max_length=20, null=False)
     BR_min = models.FloatField(default=0.5)
@@ -23,7 +22,7 @@ class megafax(models.Model):
     estado = models.IntegerField(max_length=11)
     
     def __str__(self):
-        return self.name
+        return self.nombre
     
 
 class log(models.Model):
@@ -38,3 +37,5 @@ class log(models.Model):
 
     def __str__(self):
         return self.log
+    
+#nombre_isdbt = models.ForeignKey(isdbt, on_delete=models.CASCADE) Clave foranea enlazada a la primary key de la tabla isdbt , si se borra la clave foranea se borran en cascada todos los datos relacionados

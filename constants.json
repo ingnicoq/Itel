@@ -7,7 +7,7 @@
     "login_value":"Basic YWRtaW46SXRlbDIwMTU=",
     "chat_id":-1967253112,
     "csv":"Monitoreo_ISDB-T_db/CANALES_INFO ISDB-T.csv",
-    "ubicacion": "C:\\Users\\Rodri\\Documents\\Monitoreo Developer\\Monitoreo_ISDB-T_db/Monitoreo_ISDB-T_DB.py",
+    "ubicacion": "/home/itelsa/Escritorio/Monitoreo/Itel/Monitoreo_ISDB-T_db/Monitoreo_ISDB-T_DB.py",
     "nombre_proceso":"Monitoreo_ISDB-T",
     "encab_msj":"ISDB-T:"
     },
@@ -20,7 +20,7 @@
         "login_value":"Basic YWRtaW46SXRlbDIwMTU=",
         "chat_id":-4157146702,
         "csv":"Monitoreo_Megafax_db/CANALES_INFO Megafax.csv",
-        "ubicacion": "C:\\Users\\Rodri\\Documents\\Monitoreo Developer\\Monitoreo_Megafax_db/Monitoreo_MEGAFAX_DB.py",
+        "ubicacion": "/home/itelsa/Escritorio/Monitoreo/Itel/Monitoreo_Megafax_db/Monitoreo_MEGAFAX_DB.py",
         "nombre_proceso":"Monitoreo_MEGAFAX",
         "encab_msj":"MEGAFAX:"
     }
