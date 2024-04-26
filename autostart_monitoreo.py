@@ -54,6 +54,7 @@ def terminar_process(pid):
     try:
         os.kill(pid, signal.SIGTERM)
         print("Proceso con PID {} terminado exitosamente.".format(pid))
+        time.sleep(5)
     except ProcessLookupError:
         print("El proceso con PID {} no fue encontrado.".format(pid))
     
@@ -73,21 +74,21 @@ if __name__ == "__main__":
         if not check_process(pid_isdbt):
             terminar_process(pid_isdbt)
             print(f"El proceso {process_name_isdbt} no está en ejecución. Reiniciando...")
-            pid = start_process(script_path_isdbt)
+            pid_isdbt = start_process(script_path_isdbt)
             contador=0
 
         if not check_process(pid_mega):
             terminar_process(pid_mega)
             print(f"El proceso {process_name_mega} no está en ejecución. Reiniciando...")
-            pid = start_process(script_path_mega)
+            pid_mega = start_process(script_path_mega)
             contador=0
 
         if not contador < 5:
             terminar_process(pid_mega)
-            pid=start_process(script_path_mega)
+            pid_mega=start_process(script_path_mega)
             
             terminar_process(pid_isdbt)
-            pid=start_process(script_path_isdbt)
+            pid_isdbt=start_process(script_path_isdbt)
             contador=0
 
         if not contador_borrado < 1440:
