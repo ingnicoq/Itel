@@ -5,7 +5,7 @@
     "url":"http://10.200.30.52/cgi-bin/refreshPrg.cgi",
     "login_key":"authorization",
     "login_value":"Basic YWRtaW46SXRlbDIwMTU=",
-    "chat_id":-1967253112,
+    "chat_id":-4257961720,
     "csv":"Monitoreo_ISDB-T_db/CANALES_INFO ISDB-T.csv",
     "ubicacion": "/home/itelsa/Escritorio/Monitoreo/Itel/Monitoreo_ISDB-T_db/Monitoreo_ISDB-T_DB.py",
     "nombre_proceso":"Monitoreo_ISDB-T",
