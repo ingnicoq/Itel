@@ -31,7 +31,7 @@ URL_ISDBT = df["ISDB-T"]["url"]
 login_key_ISDBT = df["ISDB-T"]["login_key"]
 login_value_ISDBT = df["ISDB-T"]["login_value"]
 CHAT_ID_ISDBT=df["ISDB-T"]["chat_id"]
-LOGIN_ISDBT = {login_key_MEGA: login_value_MEGA}
+LOGIN_ISDBT = {login_key_ISDBT: login_value_ISDBT}
 CSV_ISDBT = df["ISDB-T"]["csv"]
 UBICACION_ISDBT = df["ISDB-T"]["ubicacion"]
 NOMBRE_PROCESO_ISDBT = df["ISDB-T"]["nombre_proceso"]
@@ -172,7 +172,7 @@ def limpiar_registros_mega():
 
     return
 
-hora_borrado = "03:00"
+hora_borrado = "12:00"
 contador = 0
 if __name__ == "__main__":
 

@@ -26,7 +26,9 @@ UBICACION = ast.UBICACION_MEGA
 NOMBRE_PROCESO = ast.NOMBRE_PROCESO_MEGA
 ENCABEZ_MSJ = ast.ENCABEZ_MSJ_MEGA
 
+
 init_db
+
 
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
@@ -66,6 +68,7 @@ def leer_estado(id):
     try:
         cursor.execute(f"SELECT estado FROM `index_megafax` WHERE id=%s",[str(id)])
         valor=cursor.fetchone()[0]
+        
         return valor
     except Exception as e:
         texto='Error leer_estado: '+str(e)
@@ -93,10 +96,11 @@ def enviar_mensaje(lista,aux):
         
         resultado = '\n\t'.join(lista)
         mensaje=mensaje+resultado
-                
-        #requests.post('https://api.telegram.org/bot6682970550:AAE4cg-GbbKUgIMcM4mYcNl87Q3xa2HIqeE/sendMessage', data={'chat_id': {str(CHAT_ID)}, 'text': {mensaje}})   
-        time.sleep(0.1)
 
+           
+        requests.post('https://api.telegram.org/bot6682970550:AAE4cg-GbbKUgIMcM4mYcNl87Q3xa2HIqeE/sendMessage', data={'chat_id': {str(CHAT_ID)}, 'text': {mensaje}})   
+        time.sleep(0.1)
+       
         del mensaje
         del resultado
         
@@ -222,6 +226,14 @@ while True:
 
     now=datetime.now()
     print(now,"---- MEGAFAX")
+
+    BR_Min = consulta_BR_min()
+    for elemento in BR_Min:
+        estado = leer_estado(elemento[0])
+        canales_dic[elemento[0]]['Estado_ant']=estado
+
+
+    
     #print('Debug MSJ: Inicio While true')
     contenido=''
     ips = consulta_ip()
@@ -368,3 +380,11 @@ while True:
     #print('Debug MSJ: Fin Bucle While')
     time.sleep(10)
     
+
+
+
+
+
+
+
+
