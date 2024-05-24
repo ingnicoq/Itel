@@ -39,9 +39,12 @@ conexion = mysql.connector.connect(
     user="root",
     database=NOMBRE_DB,
     port=PORT
-)
+    )
 cursor = conexion.cursor()
+  
 
+def commit_conexion():
+    conexion.commit()
 
 class Colores:
     NEGRITA = '\033[1m'
@@ -56,7 +59,7 @@ def escribir_log(texto):
         now = datetime.now()
         texto=texto + "--> ISDBT"
         cursor.execute(f"INSERT INTO index_log (year, month, day, hour, min, sec, log) VALUES (%s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, texto))
-        conexion.commit()
+        commit_conexion()
         return 0
     except:
         print(str(now)+"--->Error en escribir LOG")
@@ -67,7 +70,6 @@ def leer_estado(id):
     try:
         cursor.execute(f"SELECT estado FROM `index_isdbt` WHERE id=%s",[str(id)])
         valor=cursor.fetchone()[0]
-        
         return valor
     except Exception as e:
         texto='Error leer_estado: '+str(e)
@@ -78,6 +80,7 @@ def leer_estado(id):
 def escribir_estado(id,estado):
     try:
         cursor.execute(f"UPDATE index_isdbt SET estado=%s WHERE id=%s",[str(estado),str(id)])
+        commit_conexion()
         return
     except Exception as e:
         texto='Error escribir_estado: '+str(e)
@@ -90,13 +93,14 @@ def enviar_mensaje(lista,aux):
     try:
         if aux ==1:
             mensaje=ENCABEZ_MSJ+'\n\nCanales Cortados:\n\t'
+
         elif aux == 2:
             mensaje=ENCABEZ_MSJ+'\n\nCanales Operativos:\n\t'
+
         
         resultado = '\n\t'.join(lista)
         mensaje=mensaje+resultado
-
-           
+ 
         requests.post('https://api.telegram.org/bot6682970550:AAE4cg-GbbKUgIMcM4mYcNl87Q3xa2HIqeE/sendMessage', data={'chat_id': {str(CHAT_ID)}, 'text': {mensaje}})   
         time.sleep(0.1)
        
@@ -152,7 +156,7 @@ def escribir_db(entrada, bitrate):
         cursor.execute("SELECT canal_id FROM index_isdbt WHERE id = %s;", [str(entrada)])
         tabla = cursor.fetchone()[0]
         cursor.execute(f"INSERT INTO graficos_isdbt_br (year, month, day, hour, min, sec, BR,canal_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (now.year, now.month, now.day, now.hour, now.minute, now.second, bitrate,tabla))
-        conexion.commit()
+        commit_conexion()
     except Exception as e:
         texto='Error escribir DB: '+str(e)
         escribir_log(texto)
@@ -188,7 +192,7 @@ def consulta_BR_min():
 def encontrar_nombre(numero):
     try:
         cursor.execute("SELECT nombre FROM index_isdbt WHERE id = %s;", [str(numero)])
-        nombre = cursor.fetchone()[0]
+        nombre = cursor.fetchone()[0] 
         return nombre
     except:
         return ""
@@ -201,10 +205,10 @@ def verificacion_tabla(posicion,nombre_mux):
             nombre=encontrar_nombre(posicion)
             if nombre_mux != nombre:
                 cursor.execute("UPDATE index_isdbt SET nombre = %s WHERE nombre = %s",(nombre_mux,nombre))
-                conexion.commit()
+                commit_conexion()
         else:
             cursor.execute(f"INSERT INTO index_isdbt (id,nombre,ip,BR_min,canal_id) VALUES (%s,%s, %s, %s, %s)",(str(max_channel[0]+1),nombre_mux, "0.0.0.0", str(0.5), f"canal_{posicion}"))
-            conexion.commit()
+            commit_conexion()
     except Exception as e:
         texto='Error verificacion tabla: '+str(e)
         escribir_log(texto)
@@ -212,9 +216,9 @@ def verificacion_tabla(posicion,nombre_mux):
 
 
 
+
 BR_Min = consulta_BR_min()
 canales_dic={}
-
 for elemento in BR_Min:
     canales_dic[elemento[0]]={'Cont_Alarm':0,'Estado_ant':0,'Estado_act':0,'BR_acum':0,'Cont_WR':0}
     estado = leer_estado(elemento[0])
@@ -225,7 +229,6 @@ while True:
 
     now=datetime.now()
     print(now,"---- ISDB-T")
-
     BR_Min = consulta_BR_min()
     for elemento in BR_Min:
         estado = leer_estado(elemento[0])
@@ -319,13 +322,14 @@ while True:
                     canales_dic[posicion]['Cont_Alarm'] +=1
                 else:
                     #print(f"|{Colores.SUBRAYADO}{row['Nombre Canal']:<30}|{Colores.SUBRAYADO}{auxiliar:<10}|{Colores.SUBRAYADO}{Colores.VERDE}{row['Bit Rate']:<10}{Colores.RESET}|{Colores.SUBRAYADO}{row['IP']:>17}{Colores.RESET}|")
+                    escribir_estado(posicion,0)
                     canales_dic[posicion]['Cont_Alarm'] =0
                     canales_dic[posicion]['Estado_act'] =0
                     #canales_dic[posicion]['Estado_ant']=leer_estado(posicion)
                     if canales_dic[posicion]['Estado_act']!=canales_dic[posicion]['Estado_ant']:
                         canales_operativos.append(row['Nombre Canal'])
                     canales_dic[posicion]['Estado_ant']=0
-                    escribir_estado(posicion,0)
+                    
 
         except Exception as e:
             print(e,row['Nombre Canal'])
@@ -340,13 +344,13 @@ while True:
         contador_posicion_dic=1
         for clave,valor in canales_dic.items():
             if valor['Cont_Alarm']>=6:
+                escribir_estado(contador_posicion_dic,1)
                 valor['Estado_act']=1
                 #valor['Estado_ant']=leer_estado(contador_posicion_dic)
                 if valor['Estado_act']!=valor['Estado_ant']:
                     nombre = encontrar_nombre(clave)
                     canales_conrtados.append(nombre)
                 valor['Estado_ant']=1
-                escribir_estado(contador_posicion_dic,1)
             contador_posicion_dic+=1
         
 
@@ -377,5 +381,5 @@ while True:
         continue
 
     #print('Debug MSJ: Fin Bucle While')
-    time.sleep(10)
+    time.sleep(15)
     
