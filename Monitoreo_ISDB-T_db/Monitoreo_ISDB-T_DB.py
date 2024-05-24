@@ -207,7 +207,7 @@ def verificacion_tabla(posicion,nombre_mux):
                 cursor.execute("UPDATE index_isdbt SET nombre = %s WHERE nombre = %s",(nombre_mux,nombre))
                 commit_conexion()
         else:
-            cursor.execute(f"INSERT INTO index_isdbt (id,nombre,ip,BR_min,canal_id) VALUES (%s,%s, %s, %s, %s)",(str(max_channel[0]+1),nombre_mux, "0.0.0.0", str(0.5), f"canal_{posicion}"))
+            cursor.execute(f"INSERT INTO index_isdbt (id,nombre,ip,BR_min,canal_id,estado) VALUES (%s,%s, %s, %s, %s,%s)",(str(max_channel[0]+1),str(nombre_mux), "0.0.0.0", str(0.5),str( f"canal_{posicion}"),str(0)))
             commit_conexion()
     except Exception as e:
         texto='Error verificacion tabla: '+str(e)
